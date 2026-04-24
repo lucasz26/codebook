@@ -28,18 +28,23 @@ export default function Publish() {
     const [description, setDescription]     = useState('');   // Descrption
     const [id,          setCount]           = useState(2);    // The "Next ID". Since we start w/ 1, our next ID is 2.
   
-    // Dictionary for test cases. This is a JS object that works similarly to:
-    // map<int, pair<string,string>>
+    // Dictionary for test cases. This is a JS object that works similarly to map<int, pair<string,string>>
     const [testCases, setTestCase] = useState({
         [1] : { input: "" , output: ""}
     });
+
+    // FUNCTIONS
 
     // Handles overall "submit". For now it's just a dummy console.log.
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Submitted Title:", title);
         console.log("Submitted description", description);
-        pullTestCases();
+        try {
+            pullTestCases();
+        } catch (e) {
+            console.log("Error, missing");
+        }
     };
 
     // Adds a case
@@ -82,9 +87,17 @@ export default function Publish() {
     const pullTestCases = (e) => {
         // Traverses through the user's inputted test cases and then pushes them out as console.logs.
         for (const [id, data] of Object.entries(testCases)) {
-            console.log(id + ": " + data.input + " => " + data.output);
+            if (!verifyBlank([id,data])) {
+                console.log(id + ": " + data.input + " => " + data.output);
+            } else {
+                throw new Error("EMPTY");
+            }
         }
     };
+
+    const verifyBlank = ([id, data]) => {
+        return data.input == "" || data.output == "";
+    }
 
     const testID = (e) => {
         e.preventDefault();
@@ -131,8 +144,8 @@ export default function Publish() {
                 
                 <div className="right flex items-center p-2">    
                     <form onSubmit={addCase}>
-                        <div className="p-1">
-                            <button type="addCase" style={{ cursor: 'pointer' }}>+</button>
+                        <div className="p-1 border rounded w-[35px] items-center center">
+                            <button type="addCase" style={{ cursor: 'pointer', textAlign : 'center'}}>+</button>
                         </div>
                     </form>
     
@@ -173,7 +186,7 @@ export default function Publish() {
             </div>
             
         <form onSubmit={handleSubmit}>
-            <button type="submit" style={{ cursor: 'pointer' }}>
+            <button type="submit" style={{ cursor: 'pointer' }} label="+">
             Submit
             </button>
         </form>
