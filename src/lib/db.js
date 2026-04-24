@@ -1,4 +1,4 @@
-import postgres from 'postgres'
+import postgres from 'postgres';
 
 console.log("INIT_DB");
 
@@ -7,7 +7,7 @@ const sql = postgres({
     user: 'myuser',
     password: 'mypassword',
     database: 'codebook'
-})
+});
 
 // Create the problems table if it doesn't exist yet
 await sql`
@@ -16,26 +16,43 @@ await sql`
         title VARCHAR(255) NOT NULL,
         description TEXT NOT NULL
     );
-`
+`;
 
 // Insert test problems if they don't exist yet (init)
 await sql`
     INSERT INTO Problems (problem_id, title, description)
     VALUES(1, 'N-Queens', '...')
     ON CONFLICT (problem_id) DO NOTHING;
-`
+`;
 await sql`
     INSERT INTO Problems (problem_id, title, description)
     VALUES(2, 'Two Sum', '...')
     ON CONFLICT (problem_id) DO NOTHING;
-`
+`;
 
 export class CodebookDBHelpers {
     static async getProblems() {
-        let res = await sql`SELECT json_agg(u) FROM Problems u`
-        return res[0]['json_agg']
+        let result = await sql`SELECT json_agg(u) FROM Problems u`;
+        return result[0]['json_agg'];
     }
-}
+    static async getProblemById(problemId) {
+        let result = await sql`SELECT * FROM Problems WHERE problem_id = ${problemId}`;
+        if (result.length > 0) {
+            return result[0];
+        } else {
+            return null;
+        }
+    }
+    static async createProblem(title, description) {
+        let result = await sql`
+            INSERT INTO Problems (title, description)
+            VALUES(${ title }, ${ description })
+        `;
+        console.log(result);
+    }
+};
+// console.log(await CodebookDBHelpers.getProblemById(1))
+// console.log(await CodebookDBHelpers.createProblem("TestTitle", "testDesc"))
 // console.log(await CodebookDBHelpers.getProblems())
 
-export default sql
+export default sql;
