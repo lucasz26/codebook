@@ -1,0 +1,14 @@
+// TODO:    ADD TITLE INPUT
+//          DESCRIPTION INPUT
+//              SEPARATE DESCRIPTION
+//              SEPERATE FOR INPUT RANGE
+//          TEST CASE INPUT
+//              TEST CASE + BUTTON
+//              TEST CASE - BUTTON
+//              TEST INPUT - > TEST OUTPUT
+//          PULL USER INPUT
+//              VERIFY ALL DATA IS INPUTTED
+//              FORMAT AS JSON
+//          MUTATE DATA.JS ARRAY
+//          DISPLAY DATA IN ARRAY FOR TESTS
+//          DISPLAY COMPLETION OF UPLOAD
