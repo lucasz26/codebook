@@ -1,5 +1,5 @@
 // TODO:    ✅  ADD TITLE INPUT
-//          ❌  DESCRIPTION INPUT
+//          🟨  DESCRIPTION INPUT
 //          ❌      SEPARATE DESCRIPTION
 //          ❌      SEPERATE FOR INPUT RANGE
 //          🟨  TEST CASE INPUT
@@ -11,8 +11,6 @@
 //          🟨      VERIFY ALL DATA IS INPUTTED
 //          ❌      FORMAT AS JSON
 //          ❌          USE THE SQL COMMAND INSTEAD?
-//          ❌  MUTATE DATA.JS ARRAY ^
-//          ❌  DISPLAY DATA IN ARRAY FOR TESTS
 //          ❌  DISPLAY COMPLETION OF UPLOAD
 
 'use client'; // This must be at the very top to allow hooks like useState
@@ -53,7 +51,7 @@ export default function Publish() {
 
         setTestCase(prev => ({ // We're essentially saying "Hey, take the previous inputs, and tack on this new one."
             ...prev,
-            [id]: { input: "", output: "" }
+            [id]: { input: "", output: "" }     // Keep it blank. This is also how we check if an entry is empty.
         }));
 
         setCount(prevCount => prevCount + 1)
@@ -67,20 +65,20 @@ export default function Publish() {
         if (id <= 2) { // Since we use id like "nextID", we know that there's only one case if our "Next ID" is 2.
             console.log("CANNOT REMOVE");    
         } else {
-            setTestCase(prev => { // Similarly to add, we take the previous, then delete the last one on the list.
-                const newState = { ...prev };
-                delete newState[id-1];
-                return newState;
+            setTestCase(prev => {
+                const newState = { ...prev };   // Take the old dictionary..
+                delete newState[id-1];          // Remove the last id 
+                return newState;                // Now set the dictionary to this new, removed-case dictionary.
             });
 
             setCount(prevCount => prevCount - 1)
         }   
     }
 
-    const updateCase = (id, input, output) => {
+    const updateCase = (id, edited, value) => {
         setTestCase(prev => ({
           ...prev,
-          [id]: { ...prev[id], [input]: output}
+          [id]: { ...prev[id], [edited]: value}
         }));
     };
 
