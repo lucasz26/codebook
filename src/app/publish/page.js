@@ -216,6 +216,7 @@ export default function Publish() {
                                     cursor: 'pointer'
                                 }}
                                 >
+                                    {hiddenCase.includes(Number(id)) ? "🤫" : "📣"}
                                 </button>
                         </div>
                     </div>
