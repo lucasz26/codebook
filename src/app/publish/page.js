@@ -16,6 +16,7 @@
 'use client'; // This must be at the very top to allow hooks like useState
 
 import { useState } from 'react';
+import { problems } from '@/lib/data';
 
 export default function Publish() {
 
@@ -37,12 +38,17 @@ export default function Publish() {
     // Handles overall "submit". For now it's just a dummy console.log.
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Submitted Title:", title);
-        console.log("Submitted Description:", description);
-        try {
-            pullTestCases();
-        } catch (e) {
-            console.log(e.toString());
+        const tTitle = title.trim(); const tDescription = description.trim()
+
+        if (tTitle == "" || tDescription == "") {
+            console.log("Empty");
+        } else {
+            try {
+                pullTestCases();
+                problems.push({id: problems.length+1, title: title, description: description});
+            } catch (e) {
+                console.log(e.toString());
+            }
         }
     };
 
@@ -116,6 +122,15 @@ export default function Publish() {
             }
         });
     }
+
+    const testExport = (e) => {
+        e.preventDefault();
+        // Need to convert becuase this id is a string, oddly enough.
+        for (let i = 0; i < problems.length; i++) {
+            console.log(problems[i].id + " : " + problems[i].title + "  |  " + problems[i].description);
+        }
+    }
+
 
     return (
         <main style={{ padding: '2rem' }}>
@@ -226,6 +241,12 @@ export default function Publish() {
         <form onSubmit={handleSubmit}>
             <button type="submit" style={{ cursor: 'pointer' }}>
             Submit
+            </button>
+        </form>
+
+        <form onSubmit={testExport}>
+            <button type="submit" style={{ cursor: 'pointer' }}>
+            Test
             </button>
         </form>
 
