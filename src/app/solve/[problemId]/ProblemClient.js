@@ -1,21 +1,46 @@
 "use client";
+import Button from "../../../components/Button";
+import Card from "../../../components/Card";
 import Editor from "@monaco-editor/react";
+import SplitPane from "../../../components/SplitPane";
 
 export default function ProblemClient({ problem }) {
+  const handleSubmit = () => {
+    console.log("submitting problem...");
+  }
+
   return (
-    <div>
-      <h1>{problem.title}</h1>
-      <p>{problem.description}</p>
-      
-      <Editor
-        height="400px"
-        defaultLanguage="cpp"
-        theme="vs-dark"
-        value=""
-        options={{
-          minimap: { enabled: false }
-        }}
-      />
-    </div>
+    <SplitPane
+      left={
+        <Card>
+          <h1>{problem.title}</h1>
+          <p>{problem.description}</p>
+        </Card>
+      }
+      right={
+        <div className="flex flex-col gap-4">
+          <Card>
+            <Editor
+              height="400px"
+              defaultLanguage="cpp"
+              theme="vs-light"
+              value=""
+              options={{
+                minimap: { enabled: false }
+              }}
+            />
+            <Button
+              type="submit"
+              text="Submit"
+              onClick={handleSubmit}
+            />
+          </Card>
+          <Card>
+            <h1>Test Result</h1>
+          </Card>
+        </div>
+      }
+      layout="standard"
+    />
   );
 }
