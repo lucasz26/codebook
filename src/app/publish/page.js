@@ -17,6 +17,8 @@
 
 import { useState } from 'react';
 import { problems } from '@/lib/data';
+import { addProblem, resetDB } from "./actions";
+
 
 export default function Publish() {
 
@@ -36,7 +38,7 @@ export default function Publish() {
     // FUNCTIONS
 
     // Handles overall "submit". For now it's just a dummy console.log.
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const tTitle = title.trim(); const tDescription = description.trim()
 
@@ -44,17 +46,23 @@ export default function Publish() {
             console.log("Empty");
         } else {
             try {
-                pullTestCases();
-                problems.push({id: problems.length+1, title: title, description: description});
+                pullTestCases(); // Print out test cases. We can't yet store them, so this is more just "verification" that it showed up.
+                await addProblem(tTitle, tDescription); // Actually add to the SQL database.
             } catch (e) {
                 console.log(e.toString());
             }
         }
     };
 
+    const handleReset = async (e) => {
+        e.preventDefault();
+        await resetDB();
+    }
+
     // Adds a case
     const addCase = (e) => {
         e.preventDefault(); 
+        if (e) e.preventDefault(); 
 
         setTestCase(prev => ({ // We're essentially saying "Hey, take the previous inputs, and tack on this new one."
             ...prev,
@@ -69,6 +77,7 @@ export default function Publish() {
     // Removes a case.
     const removeCase = (e) => {
         e.preventDefault();
+        if (e) e.preventDefault();
 
         // Check if there's 1 case, you must submit minimum 1 case.
         if (id <= 2) { // Since we use id like "nextID", we know that there's only one case if our "Next ID" is 2.
@@ -79,6 +88,8 @@ export default function Publish() {
                 delete newState[id-1];          // Remove the last id 
                 return newState;                // Now set the dictionary to this new, removed-case dictionary.
             });
+            
+            setHidden(prev => prev.filter(item => item !== id - 1));
 
             setCount(prevCount => prevCount - 1)
         }   
@@ -238,17 +249,20 @@ export default function Publish() {
                 ))}
             </div>
             
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}> 
             <button type="submit" style={{ cursor: 'pointer' }}>
             Submit
             </button>
         </form>
 
-        <form onSubmit={testExport}>
-            <button type="submit" style={{ cursor: 'pointer' }}>
-            Test
-            </button>
-        </form>
+        {/* THIS BUTTON RESETS THE ENTIRE DATABASE !!!!!!!!!!!!!!!!!!!!!!!!! ONLY UNCOMMENT FOR TESTING PURPOSES!!!!
+
+            {/* <form onSubmit={resetDB}>
+                <button type="submit" style={{ cursor: 'pointer' }}>
+                Reset Database
+                </button>
+            </form> 
+        */}
 
         </main>
     );

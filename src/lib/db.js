@@ -66,6 +66,30 @@ export class CodebookDBHelpers {
         verdict: "Accepted"
       };
     }
+
+    // Isabelle added this! 
+    static async resetProblems() {
+        try {
+            // Reset the entire Database. This is quite dangerous, but works for this situation.
+            await sql`TRUNCATE TABLE Problems RESTART IDENTITY CASCADE`;
+        
+            // Reinsert the base data
+            await sql`
+                INSERT INTO Problems (problem_id, title, description)
+                VALUES 
+                (1, 'N-Queens', '...'),
+                (2, 'Two Sum', '...')
+            `;
+
+            // Set the counter to 2, since if you didn't, you'd have to submit twice before it let you submit.
+            await sql`SELECT setval(pg_get_serial_sequence('Problems', 'problem_id'), 2)`;
+            
+            console.log("Database reset successful");
+        } catch (error) {
+            console.error("Failed to reset database:", error);
+            throw error;
+        }
+    }
 };
 // console.log(await CodebookDBHelpers.getProblemById(1))
 // console.log(await CodebookDBHelpers.createProblem("TestTitle", "testDesc"))
