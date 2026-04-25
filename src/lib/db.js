@@ -50,6 +50,22 @@ export class CodebookDBHelpers {
         `;
         console.log(result);
     }
+    static async createSubmission(data) {
+      // data is a js object like {problemId: problemId, code: code}
+      // this function should return the created record
+      // placeholder return so that my code works for now
+      return {
+        id: 1,
+        problemId: data.problemId,
+        code: data.code
+      };
+    }
+    static async getResultsById(submissionId) {
+      return {
+        id: submissionId,
+        verdict: "Accepted"
+      };
+    }
 };
 // console.log(await CodebookDBHelpers.getProblemById(1))
 // console.log(await CodebookDBHelpers.createProblem("TestTitle", "testDesc"))
