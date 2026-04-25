@@ -50,6 +50,12 @@ export class CodebookDBHelpers {
         `;
         console.log(result);
     }
+    static async createSubmission(data) {
+    }
+    static async getTestcasesById(problemId) {
+    }
+    static async getResultsById(solutionId) {
+    }
 };
 // console.log(await CodebookDBHelpers.getProblemById(1))
 // console.log(await CodebookDBHelpers.createProblem("TestTitle", "testDesc"))

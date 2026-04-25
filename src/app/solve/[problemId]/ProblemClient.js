@@ -1,12 +1,18 @@
 "use client";
+import { useRef } from "react";
+import { saveCode } from "./actions";
 import Button from "../../../components/Button";
 import Card from "../../../components/Card";
 import Editor from "@monaco-editor/react";
 import SplitPane from "../../../components/SplitPane";
 
 export default function ProblemClient({ problem }) {
-  const handleSubmit = () => {
-    console.log("submitting problem...");
+  const editorRef = useRef(null);
+
+  const handleSubmit = async () => {
+    const code = editorRef.current.getValue();
+    console.log(code);
+    await saveCode(problem.id, code);
   }
 
   return (
@@ -21,6 +27,7 @@ export default function ProblemClient({ problem }) {
         <div className="flex flex-col gap-4">
           <Card>
             <Editor
+              onMount={(editor) => editorRef.current = editor}
               height="400px"
               defaultLanguage="cpp"
               theme="vs-light"
@@ -40,7 +47,7 @@ export default function ProblemClient({ problem }) {
           </Card>
         </div>
       }
-      layout="standard"
+      layout="equal"
     />
   );
 }
