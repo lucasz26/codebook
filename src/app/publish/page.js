@@ -85,7 +85,7 @@ export default function Publish() {
     const pullTestCases = (e) => {
         // Traverses through the user's inputted test cases and then pushes them out as console.logs.
         for (const [id, data] of Object.entries(testCases)) {
-            if (!verifyBlank([id,data])) {
+            if (verifyCaseEntry([id,data])) {
                 console.log(id + ": " + data.input + " => " + data.output);
             } else {
                 throw new Error("EMPTY");
@@ -93,8 +93,8 @@ export default function Publish() {
         }
     };
 
-    const verifyBlank = ([id, data]) => {
-        return data.input == "" || data.output == "";
+    const verifyCaseEntry = ([id, data]) => {
+        return !(data.input == "" || data.output == "");
     }
 
     const testID = (e) => {
@@ -109,40 +109,53 @@ export default function Publish() {
         
             {/* Title Block */}
             <div style={{ marginBottom: '1rem' }}>
-                <label htmlFor="title" style={{ display: 'block' }}>Title:</label>
-                <input 
+            {/* A space for a label and a subtext (which is italicized and is smaller) */}
+                <div className="flex items-end">
+                    <label htmlFor="textboxes" className="p-1">Title</label>
+                    <label htmlFor="textboxes" className="p-1 text-xs italic">(What is your question called?)</label>
+                </div>
+                
+                <textarea 
                     id="title"
                     type="text" 
                     value={title} 
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Question Name..."
-                    style={{ padding: '0.5rem', width: '300px' }}
+                    style={{ padding: '0.5rem', width: '300px', resize: 'none' }}
                 />
             </div>
 
             {/* Description */}
             <div style={{ marginBottom: '1rem' }}>
                 <label htmlFor="description" style={{ display: 'block' }}>Description:</label>
-                <input 
+                <textarea
                     id="description"
-                    type="text" 
                     value={description} 
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Description"
-                    style={{ padding: '0.5rem', width: '300px' }}
+                    style={{ padding: '0.5rem', width: '100%', height: '400px', borderWidth : '1px', 
+
+                        resize: 'none',
+                        
+                        textWrap: 'wrap', 
+                        whiteSpace: 'pre-wrap', 
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word'}}
                 />
             </div>
 
             {/* Test Cases */}
             <div className="flex items-center p-2 justify-between">
-                <div className="flex items-center p-2">
-                    <label htmlFor="textboxes" className="p-1" style={{ display: 'block' }}>Test Cases:</label>
-                    <label htmlFor="textboxes" className="p-1" style= {{size: '5px'}}>TinyTinyTiny</label>
+                
+                {/* A space for a label and a subtext (which is italicized and is smaller) */}
+                <div className="flex items-end">
+                    <label htmlFor="textboxes" className="p-1">Test Cases:</label>
+                    <label htmlFor="textboxes" className="p-1 text-xs italic">(Input test cases and their expected outputs)</label>
                 </div>
                 
                 <div className="right flex items-center p-2">    
                     <form onSubmit={addCase}>
-                        <div className="p-1 border rounded w-[35px] items-center center">
+                        <div className="p-1 border rounded w-[35px] place-items-center center">
                             <button type="addCase" style={{ cursor: 'pointer', textAlign : 'center'}}>+</button>
                         </div>
                     </form>
@@ -156,13 +169,13 @@ export default function Publish() {
             </div>
 
             {/* This block stores the adapting test cases. */}
-            <div className="flex flex-col border rounded overflow-y-auto h-[400px]">
+            <div className="flex flex-col border rounded overflow-y-auto h-[400px] p-2 mb-2">
                 {Object.entries(testCases).map(([id, data]) => (
-                    <div key={id} className="flex items-center gap-3 p-3 border rounded shadow-sm mb-2">
+                    <div key={id} className="flex items-center gap-3 p-3 border rounded shadow-sm">
                         <span className="text-sm font-bold whitespace-nowrap">Case {id}:</span>
 
                         {/* We're essentially that the first block is the test "input", while the second is the test "output" */}
-                        <div className="flex flex-1 items-center gap-2">
+                        <div className="flex flex-1 items-center gap-3">
                             <input 
                                 className="flex-1 min-w-0 border p-1.5 rounded text-sm focus:ring-1 focus:outline-none"
                                 placeholder="Input"
