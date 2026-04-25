@@ -1,18 +1,3 @@
-// TODO:    ✅  ADD TITLE INPUT
-//          🟨  DESCRIPTION INPUT
-//          🟨      SEPARATE DESCRIPTION
-//          ❌      SEPERATE FOR INPUT RANGE
-//          🟨  TEST CASE INPUT
-//          ✅      TEST CASE + BUTTON
-//          ✅      TEST CASE - BUTTON
-//          ✅      TEST INPUT - > TEST OUTPUT
-//          ❌          IMPLEMENT CHECKS FOR ARRAYS
-//          🟨  PULL USER INPUT
-//          🟨      VERIFY ALL DATA IS INPUTTED
-//          ❌      FORMAT AS JSON
-//          ❌          USE THE SQL COMMAND INSTEAD?
-//          ❌  DISPLAY COMPLETION OF UPLOAD
-
 'use client'; // This must be at the very top to allow hooks like useState
 
 import { useState } from 'react';
