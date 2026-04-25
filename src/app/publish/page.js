@@ -1,6 +1,6 @@
 // TODO:    ✅  ADD TITLE INPUT
 //          🟨  DESCRIPTION INPUT
-//          ❌      SEPARATE DESCRIPTION
+//          🟨      SEPARATE DESCRIPTION
 //          ❌      SEPERATE FOR INPUT RANGE
 //          🟨  TEST CASE INPUT
 //          ✅      TEST CASE + BUTTON
@@ -25,6 +25,7 @@ export default function Publish() {
     const [title,       setTitle]           = useState('');   // The title
     const [description, setDescription]     = useState('');   // Descrption
     const [id,          setCount]           = useState(2);    // The "Next ID". Since we start w/ 1, our next ID is 2.
+    const [hiddenCase,  setHidden]          = useState([1])   // Array of what test cases are "Hidden". Upon creation, they will automatically be hidden.
   
     // Dictionary for test cases. This is a JS object that works similarly to map<int, pair<string,string>>
     const [testCases, setTestCase] = useState({
@@ -37,11 +38,11 @@ export default function Publish() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Submitted Title:", title);
-        console.log("Submitted description", description);
+        console.log("Submitted Description:", description);
         try {
             pullTestCases();
         } catch (e) {
-            console.log("Error, missing");
+            console.log(e.toString());
         }
     };
 
@@ -54,7 +55,9 @@ export default function Publish() {
             [id]: { input: "", output: "" }     // Keep it blank. This is also how we check if an entry is empty.
         }));
 
-        setCount(prevCount => prevCount + 1)
+        setHidden(prev => [...prev, id]);
+        setCount(prevCount => prevCount + 1);
+        
     };
 
     // Removes a case.
@@ -83,13 +86,11 @@ export default function Publish() {
     };
 
     const pullTestCases = (e) => {
-        // Traverses through the user's inputted test cases and then pushes them out as console.logs.
-        for (const [id, data] of Object.entries(testCases)) {
-            if (verifyCaseEntry([id,data])) {
-                console.log(id + ": " + data.input + " => " + data.output);
-            } else {
-                throw new Error("EMPTY");
-            }
+        // First, check if everything has an entry. If not, we'll pass an error.
+        for (const [id, data] of Object.entries(testCases)) { if (!verifyCaseEntry([id,data])) { throw new Error("Case " + id + " has empty fields."); }}
+
+        for (const [id, data] of Object.entries(testCases)) { 
+            console.log(id + " : " + data.input + " => " + data.output + " and is " + (hiddenCase.includes(Number(id)) ? "HIDDEN" : "VISIBLE"));
         }
     };
 
@@ -102,6 +103,19 @@ export default function Publish() {
         console.log({id});
         pullTestCases();
     };
+
+    const updateHidden = (id) => {
+        // Need to convert becuase this id is a string, oddly enough.
+        const targetId = Number(id);
+    
+        setHidden((prev) => {
+            if (prev.includes(targetId)) { // If it is in the "HIDDEN" list...
+                return prev.filter((item) => item !== targetId); // Remove it.
+            } else {
+                return [...prev, targetId]; // Else, we can add it to our list.
+            }
+        });
+    }
 
     return (
         <main style={{ padding: '2rem' }}>
@@ -133,7 +147,7 @@ export default function Publish() {
                     value={description} 
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Description"
-                    style={{ padding: '0.5rem', width: '100%', height: '400px', borderWidth : '1px', 
+                    style={{ padding: '0.5rem', width: '100%', height: '200px', borderWidth : '1px', 
 
                         resize: 'none',
                         
@@ -171,7 +185,7 @@ export default function Publish() {
             {/* This block stores the adapting test cases. */}
             <div className="flex flex-col border rounded overflow-y-auto h-[400px] p-2 mb-2">
                 {Object.entries(testCases).map(([id, data]) => (
-                    <div key={id} className="flex items-center gap-3 p-3 border rounded shadow-sm">
+                    <div key={id} className="flex items-center gap-3 p-3 border rounded shadow-sm mb-2">
                         <span className="text-sm font-bold whitespace-nowrap">Case {id}:</span>
 
                         {/* We're essentially that the first block is the test "input", while the second is the test "output" */}
@@ -191,13 +205,25 @@ export default function Publish() {
                                 value={data.output}
                                 onChange={(e) => updateCase(id, "output", e.target.value)}
                             />
+
+                            {/* Button to toggle case visibility. */}
+                            <button 
+                                onClick={(e) => updateHidden(id)}
+                                style={{
+                                    // If the test case is in the "HIDDEN" list, it's red. Otherwise, it's green.
+                                    backgroundColor: hiddenCase.includes(Number(id)) ? '#ef4444' : '#22c55e',
+                                    padding: '10px 20px',
+                                    cursor: 'pointer'
+                                }}
+                                >
+                                </button>
                         </div>
                     </div>
                 ))}
             </div>
             
         <form onSubmit={handleSubmit}>
-            <button type="submit" style={{ cursor: 'pointer' }} label="+">
+            <button type="submit" style={{ cursor: 'pointer' }}>
             Submit
             </button>
         </form>
