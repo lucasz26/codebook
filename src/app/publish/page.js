@@ -88,18 +88,57 @@ export default function Publish() {
     };
 
     const pullTestCases = (e) => {
+
+        const verifyCaseEntry = ([id, data]) => {
+            return !(data.input == "" || data.output == "");
+        }    
+
         // First, check if everything has an entry. If not, we'll pass an error.
         for (const [id, data] of Object.entries(testCases)) { if (!verifyCaseEntry([id,data])) { throw new Error("Case " + id + " has empty fields."); }}
+
+        let inputForceArr = false;
+        let outputForceArr = false;
+
+        // Next, we check if entries are consistent. If one input contains an array, all should.
+
+        // What type is our passed in string? Is it an array? Is it a number? Perhaps, even a string?
+        const typeOf = (str) => {
+            try {
+                const parsed = JSON.parse(str); 
+                if (Array.isArray(parsed)) return "array";
+                return typeof parsed; // This is the case for NUMBERS, objects, bools, etc.
+            } catch (e) { 
+                // JSON.parse() struggles with strings, so any error caught is a string.
+                return "string";
+            } 
+        };
+    
+        // the first entry is our "sentinel". Whatever it is, everyone else has to copy.
+        const [firstId, firstData] = Object.entries(testCases)[0];
+        const inputType = typeOf(firstData.input);
+        const outputType = typeOf(firstData.output);
+
+        console.log("We're expecting " + inputType + " inputs and " + outputType + " outputs.");
+    
+        for (const [id, data] of Object.entries(testCases)) {
+            // Compare against the first input.
+            if (typeOf(data.input) !== inputType) {
+                throw new Error(`Inconsistent Array Input: Case ${id} was expected to be a(n) ${inputType}.`);
+            }
+    
+            if (typeOf(data.output) !== outputType) {
+                throw new Error(`Inconsistent Array Output: Case ${id} was expected to be ${outputType}.`);
+            }
+        } // We only throw errors if we have issues, otherwise, no need to do anything.
+
+        // Finally, we finally "pull" this validated information.
+        console.log("All inputs are a(n) " + inputType + "  |  All outputs are a(n)" + outputType);
 
         for (const [id, data] of Object.entries(testCases)) { 
             console.log(id + " : " + data.input + " => " + data.output + " and is " + (hiddenCase.includes(Number(id)) ? "HIDDEN" : "VISIBLE"));
         }
     };
-
-    const verifyCaseEntry = ([id, data]) => {
-        return !(data.input == "" || data.output == "");
-    }
-
+    
     const testID = (e) => {
         e.preventDefault();
         console.log({id});
@@ -240,15 +279,12 @@ export default function Publish() {
             </button>
         </form>
 
-        {/* THIS BUTTON RESETS THE ENTIRE DATABASE !!!!!!!!!!!!!!!!!!!!!!!!! ONLY UNCOMMENT FOR TESTING PURPOSES!!!!
-
-            {/* <form onSubmit={resetDB}>
+        {/* This is the evil RESET DB button. YOU WILL RESET THE DATABASE TO THE ORIGINAL MOCK DATA. BE WARNED. */}
+            <form onSubmit={resetDB}>
                 <button type="submit" style={{ cursor: 'pointer' }}>
                 Reset Database
                 </button>
             </form> 
-        */}
-
         </main>
     );
 }
