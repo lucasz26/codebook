@@ -91,10 +91,46 @@ export default function Publish() {
         // First, check if everything has an entry. If not, we'll pass an error.
         for (const [id, data] of Object.entries(testCases)) { if (!verifyCaseEntry([id,data])) { throw new Error("Case " + id + " has empty fields."); }}
 
+        let inputForceArr = false;
+        let outputForceArr = false;
+
+        // Next, we check if entries are consistent. If one input contains an array, all should.
+
+        // Should our given entry be an array? This is a very, VERY naive check. I love me a good lambda.
+        const looksLikeArray = (str) => {
+            if (str.startsWith('[') && str.endsWith(']')) {
+                if (str[str.length-2] == ",") throw new Error("Array is incomplete"); // We have something like [1, 2.... 3,] Which is invalid
+                return true;
+            }
+            return false;
+        };
+    
+        // The first entry decides if we are looking at arrays.
+        const [firstId, firstData] = Object.entries(testCases)[0];
+        const shouldInputBeArray = looksLikeArray(firstData.input);
+        const shouldOutputBeArray = looksLikeArray(firstData.output);
+    
+        for (const [id, data] of Object.entries(testCases)) {
+            // Compare against the first input.
+            if (looksLikeArray(data.input) !== shouldInputBeArray) {
+                const status = shouldInputBeArray ? "an array" : "not an array";
+                throw new Error(`Inconsistent Array Input: Case ${id} was expected to be ${status}.`);
+            }
+    
+            if (looksLikeArray(data.output) !== shouldOutputBeArray) {
+                const status = shouldOutputBeArray ? "an array" : "not an array";
+                throw new Error(`Inconsistent Array Output: Case ${id} was expected to be ${status}.`);
+            }
+        }
+
+        // Finally, we finally "pull" this validated information.
+        console.log("All inputs are " + (shouldInputBeArray ? "arrays" : "single entries") + "  |  All outputs are " + (shouldOutputBeArray ? "arrays" : "single entries"));
+
         for (const [id, data] of Object.entries(testCases)) { 
             console.log(id + " : " + data.input + " => " + data.output + " and is " + (hiddenCase.includes(Number(id)) ? "HIDDEN" : "VISIBLE"));
         }
     };
+
 
     const verifyCaseEntry = ([id, data]) => {
         return !(data.input == "" || data.output == "");
@@ -240,15 +276,12 @@ export default function Publish() {
             </button>
         </form>
 
-        {/* THIS BUTTON RESETS THE ENTIRE DATABASE !!!!!!!!!!!!!!!!!!!!!!!!! ONLY UNCOMMENT FOR TESTING PURPOSES!!!!
-
-            {/* <form onSubmit={resetDB}>
+        {/* This is the evil RESET DB button. YOU WILL RESET THE DATABASE TO THE ORIGINAL MOCK DATA. BE WARNED. */}
+            <form onSubmit={resetDB}>
                 <button type="submit" style={{ cursor: 'pointer' }}>
                 Reset Database
                 </button>
             </form> 
-        */}
-
         </main>
     );
 }
