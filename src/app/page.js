@@ -8,4 +8,3 @@ export default async function HomePage() {
   const problems = await CodebookDBHelpers.getProblems();
   return <HomeClient problems={problems} />;
 }
-

@@ -20,39 +20,6 @@ const styles = `
     min-height: 100vh;
   }
 
-  /* NAV */
-  .nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid #ffffff;
-    position: sticky;
-    top: 0;
-    background: #111111;
-    z-index: 100;
-  }
-  .logo {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #ffffff;
-    text-decoration: none;
-  }
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-  }
-  .nav-links a {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #ffffff;
-    text-decoration: none;
-    transition: color 0.15s;
-  }
-  .nav-links a:hover { color: #333333; }
-  .nav-links a.active { color: #ffffff; font-weight: 700; }
 
   /* HERO */
 
@@ -198,31 +165,6 @@ const styles = `
   }
 `;
 
-// ── NAV ─────────────────────────────────────────────────────────────────────
-const NAV_LINKS = [
-  { href: '/',           label: 'Home'    },
-  { href: '/publish',     label: 'Publish'      },
-  // { href: '/solve',        label: 'Solve'         },
-  
-];
-
-function Navbar() {
-  const pathname = usePathname();
-  return (
-    <nav className="nav">
-      <Link href="/" className="logo">CodeBook</Link>
-      <ul className="nav-links">
-        {NAV_LINKS.map(({ href, label }) => (
-          <li key={href}>
-            <Link href={href} className={pathname === href ? 'active' : ''}>
-              {label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-}
 
 // ── CARD ─────────────────────────────────────────────────────────────────────
 function ProblemCard({ problem }) {
@@ -264,8 +206,7 @@ const visible = useMemo(() => {
   return (
     <>
       <style>{styles}</style>
-      <Navbar />
-
+    
       <section className="hero">
         <h1>Coding Problems</h1>
         <div className="search-row">
@@ -293,5 +234,4 @@ const visible = useMemo(() => {
     </>
   );
 }
-
 
