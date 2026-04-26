@@ -202,7 +202,7 @@ const styles = `
 const NAV_LINKS = [
   { href: '/',           label: 'Home'    },
   { href: '/publish',     label: 'Publish'      },
-  { href: '/solve',        label: 'Solve'         },
+  // { href: '/solve',        label: 'Solve'         },
   
 ];
 
