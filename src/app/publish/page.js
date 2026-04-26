@@ -14,6 +14,7 @@ export default function Publish() {
     const [description, setDescription]     = useState('');   // Descrption
     const [id,          setCount]           = useState(2);    // The "Next ID". Since we start w/ 1, our next ID is 2.
     const [hiddenCase,  setHidden]          = useState([1])   // Array of what test cases are "Hidden". Upon creation, they will automatically be hidden.
+    const [notif,       setNotification]    = useState({ message: "", type: "" }); // The notification that says if something was submitted successfully or not!
   
     // Dictionary for test cases. This is a JS object that works similarly to map<int, pair<string,string>>
     const [testCases, setTestCase] = useState({
@@ -28,15 +29,30 @@ export default function Publish() {
         const tTitle = title.trim(); const tDescription = description.trim()
 
         if (tTitle == "" || tDescription == "") {
-            console.log("Empty");
+
+            if (tTitle == "" && tDescription == "") { setNotification({ message: "You're missing a title and description!", type: "warning" }); }
+            else if (tTitle == "") { setNotification({ message: "You're missing a title!", type: "warning" }); }
+            else { setNotification({ message: "You're missing a description!", type: "warning" }); }
+            
+            return;
         } else {
             try {
                 pullTestCases(); // Print out test cases. We can't yet store them, so this is more just "verification" that it showed up.
+                
+                // No issues occured, so we can safely add.
                 await addProblem(tTitle, tDescription); // Actually add to the SQL database.
+                setNotification({ message: "Problem submitted!", type: "success" });
+                return;
             } catch (e) {
-                console.log(e.toString());
+                const errorTxt = e.toString();
+
+                if (errorTxt.includes("empty")) { setNotification({ message: "You might be missing something in your test cases!", type: "warning" }); }
+                else if (errorTxt.includes("input")) { setNotification({ message: "Check your inputs!", type: "warning" }); }
+                else { setNotification({ message: "Check your outputs!", type: "warning" }); }
             }
         }
+
+        setTimeout(() => setNotification({ message: "", type: "" }), 3000);
     };
 
     const handleReset = async (e) => {
@@ -94,7 +110,7 @@ export default function Publish() {
         }    
 
         // First, check if everything has an entry. If not, we'll pass an error.
-        for (const [id, data] of Object.entries(testCases)) { if (!verifyCaseEntry([id,data])) { throw new Error("Case " + id + " has empty fields."); }}
+        for (const [id, data] of Object.entries(testCases)) { if (!verifyCaseEntry([id,data])) { throw new Error("empty"); }}
 
         let inputForceArr = false;
         let outputForceArr = false;
@@ -123,11 +139,11 @@ export default function Publish() {
         for (const [id, data] of Object.entries(testCases)) {
             // Compare against the first input.
             if (typeOf(data.input) !== inputType) {
-                throw new Error(`Inconsistent Array Input: Case ${id} was expected to be a(n) ${inputType}.`);
+                throw new Error('input');
             }
     
             if (typeOf(data.output) !== outputType) {
-                throw new Error(`Inconsistent Array Output: Case ${id} was expected to be ${outputType}.`);
+                throw new Error('output');
             }
         } // We only throw errors if we have issues, otherwise, no need to do anything.
 
@@ -170,6 +186,8 @@ export default function Publish() {
     return (
         <main style={{ padding: '2rem' }}>
         <h1>Publish New Problem</h1>
+
+            
         
             {/* Title Block */}
             <div style={{ marginBottom: '1rem' }}>
@@ -274,6 +292,16 @@ export default function Publish() {
             </div>
             
         <form onSubmit={handleSubmit}> 
+            {notif.message && (
+                <div className={`notification ${notif.type}`} style={{
+                    padding: '10px', 
+                    backgroundColor: notif.type === 'success' ? '#22c55e' : '#ef4444',
+                    color: 'white'
+                }}>
+                    {notif.message}
+                </div>
+            )}
+
             <button type="submit" style={{ cursor: 'pointer' }}>
             Submit
             </button>
