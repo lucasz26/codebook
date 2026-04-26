@@ -88,6 +88,11 @@ export default function Publish() {
     };
 
     const pullTestCases = (e) => {
+
+        const verifyCaseEntry = ([id, data]) => {
+            return !(data.input == "" || data.output == "");
+        }    
+
         // First, check if everything has an entry. If not, we'll pass an error.
         for (const [id, data] of Object.entries(testCases)) { if (!verifyCaseEntry([id,data])) { throw new Error("Case " + id + " has empty fields."); }}
 
@@ -96,46 +101,44 @@ export default function Publish() {
 
         // Next, we check if entries are consistent. If one input contains an array, all should.
 
-        // Should our given entry be an array? This is a very, VERY naive check. I love me a good lambda.
-        const looksLikeArray = (str) => {
-            if (str.startsWith('[') && str.endsWith(']')) {
-                if (str[str.length-2] == ",") throw new Error("Array is incomplete"); // We have something like [1, 2.... 3,] Which is invalid
-                return true;
-            }
-            return false;
+        // What type is our passed in string? Is it an array? Is it a number? Perhaps, even a string?
+        const typeOf = (str) => {
+            try {
+                const parsed = JSON.parse(str); 
+                if (Array.isArray(parsed)) return "array";
+                return typeof parsed; // This is the case for NUMBERS, objects, bools, etc.
+            } catch (e) { 
+                // JSON.parse() struggles with strings, so any error caught is a string.
+                return "string";
+            } 
         };
     
-        // The first entry decides if we are looking at arrays.
+        // the first entry is our "sentinel". Whatever it is, everyone else has to copy.
         const [firstId, firstData] = Object.entries(testCases)[0];
-        const shouldInputBeArray = looksLikeArray(firstData.input);
-        const shouldOutputBeArray = looksLikeArray(firstData.output);
+        const inputType = typeOf(firstData.input);
+        const outputType = typeOf(firstData.output);
+
+        console.log("We're expecting " + inputType + " inputs and " + outputType + " outputs.");
     
         for (const [id, data] of Object.entries(testCases)) {
             // Compare against the first input.
-            if (looksLikeArray(data.input) !== shouldInputBeArray) {
-                const status = shouldInputBeArray ? "an array" : "not an array";
-                throw new Error(`Inconsistent Array Input: Case ${id} was expected to be ${status}.`);
+            if (typeOf(data.input) !== inputType) {
+                throw new Error(`Inconsistent Array Input: Case ${id} was expected to be a(n) ${inputType}.`);
             }
     
-            if (looksLikeArray(data.output) !== shouldOutputBeArray) {
-                const status = shouldOutputBeArray ? "an array" : "not an array";
-                throw new Error(`Inconsistent Array Output: Case ${id} was expected to be ${status}.`);
+            if (typeOf(data.output) !== outputType) {
+                throw new Error(`Inconsistent Array Output: Case ${id} was expected to be ${outputType}.`);
             }
-        }
+        } // We only throw errors if we have issues, otherwise, no need to do anything.
 
         // Finally, we finally "pull" this validated information.
-        console.log("All inputs are " + (shouldInputBeArray ? "arrays" : "single entries") + "  |  All outputs are " + (shouldOutputBeArray ? "arrays" : "single entries"));
+        console.log("All inputs are a(n) " + inputType + "  |  All outputs are a(n)" + outputType);
 
         for (const [id, data] of Object.entries(testCases)) { 
             console.log(id + " : " + data.input + " => " + data.output + " and is " + (hiddenCase.includes(Number(id)) ? "HIDDEN" : "VISIBLE"));
         }
     };
-
-
-    const verifyCaseEntry = ([id, data]) => {
-        return !(data.input == "" || data.output == "");
-    }
-
+    
     const testID = (e) => {
         e.preventDefault();
         console.log({id});
