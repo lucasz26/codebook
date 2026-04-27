@@ -46,9 +46,7 @@ export default function Publish() {
             } catch (e) {
                 const errorTxt = e.toString();
 
-                if (errorTxt.includes("empty")) { setNotification({ message: "You might be missing something in your test cases!", type: "warning" }); }
-                else if (errorTxt.includes("input")) { setNotification({ message: "Check your inputs!", type: "warning" }); }
-                else { setNotification({ message: "Check your outputs!", type: "warning" }); }
+                setNotification({ message: e.message, type: "warning"  });
             }
         }
 
@@ -139,7 +137,7 @@ export default function Publish() {
         for (const [id, data] of Object.entries(testCases)) {
             // Compare against the first input.
             if (typeOf(data.input) !== inputType) {
-                throw new Error('input');
+                throw new Error(`Inconsistent Array Input: Case ${id} was expected to be a(n) ${inputType}.`);
             }
     
             if (typeOf(data.output) !== outputType) {
