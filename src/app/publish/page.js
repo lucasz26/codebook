@@ -36,18 +36,14 @@ export default function Publish() {
             
             return;
         } else {
-            try {
-                pullTestCases(); // Print out test cases. We can't yet store them, so this is more just "verification" that it showed up.
+            const result = pullTestCases(); // "Pull" the test cases. If it's successful, we'll get a "success" notification.
                 
-                // No issues occured, so we can safely add.
+            if (result == "success") {
                 await addProblem(tTitle, tDescription); // Actually add to the SQL database.
                 setNotification({ message: "Problem submitted!", type: "success" });
                 return;
-            } catch (e) {
-                const errorTxt = e.toString();
+            } else { setNotification({ message: result, type: "warning"  }); }
 
-                setNotification({ message: e.message, type: "warning"  });
-            }
         }
 
         setTimeout(() => setNotification({ message: "", type: "" }), 3000);
@@ -107,8 +103,8 @@ export default function Publish() {
             return !(data.input == "" || data.output == "");
         }    
 
-        // First, check if everything has an entry. If not, we'll pass an error.
-        for (const [id, data] of Object.entries(testCases)) { if (!verifyCaseEntry([id,data])) { throw new Error("empty"); }}
+        // First, check if everything has an entry. If not, we'll pass a message along.
+        for (const [id, data] of Object.entries(testCases)) { if (!verifyCaseEntry([id,data])) { return `Case ${id} has empty fields.`; }}
 
         let inputForceArr = false;
         let outputForceArr = false;
@@ -137,13 +133,13 @@ export default function Publish() {
         for (const [id, data] of Object.entries(testCases)) {
             // Compare against the first input.
             if (typeOf(data.input) !== inputType) {
-                throw new Error(`Inconsistent Array Input: Case ${id} was expected to be a(n) ${inputType}.`);
+                return `Case ${id}'s input is a ${typeOf(data.input)}. Did you mean a ${inputType}?`;
             }
     
             if (typeOf(data.output) !== outputType) {
-                throw new Error('output');
+                return `Case ${id}'s output is a ${typeOf(data.output)}. Did you mean a ${outputType}?`;
             }
-        } // We only throw errors if we have issues, otherwise, no need to do anything.
+        } 
 
         // Finally, we finally "pull" this validated information.
         console.log("All inputs are a(n) " + inputType + "  |  All outputs are a(n)" + outputType);
@@ -151,6 +147,8 @@ export default function Publish() {
         for (const [id, data] of Object.entries(testCases)) { 
             console.log(id + " : " + data.input + " => " + data.output + " and is " + (hiddenCase.includes(Number(id)) ? "HIDDEN" : "VISIBLE"));
         }
+
+        return "success"; // Everything went through okay? Then we can return a success message!
     };
     
     const testID = (e) => {
