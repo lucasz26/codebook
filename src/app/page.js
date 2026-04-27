@@ -1,10 +1,10 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import HomeClient from './HomeClient';
+// For testing db.js
+import '@/lib/db'
 
-import { CodebookDBHelpers } from '@/lib/db';
-
-export default async function HomePage() {
-  const problems = await CodebookDBHelpers.getProblems();
-  return <HomeClient problems={problems} />;
+export default function Home() {
+  return (
+    <main style={{ padding: '2rem' }}>
+      <h1>CodeBook Home</h1>
+    </main>
+  );
 }
