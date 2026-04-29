@@ -2,7 +2,6 @@ import '@testing-library/jest-dom';
 import { render, screen } from "@testing-library/react";
 import SolvePage from "./page.js";
 
-// mock data
 // intercepts any requests to db.js
 jest.mock("../../../lib/db.js", () => ({
   CodebookDBHelpers: {
@@ -26,4 +25,15 @@ test("displays problem details", async () => {
   // is the description displaying correctly?
   const description = await screen.findByText("This is a mock description.");
   expect(description).toBeInTheDocument();
+});
+
+// tests whether SolvePage component displays test result card
+test("displays test results", async () => {
+  const mockParams = Promise.resolve({ problemId: "1" });
+  const ResolvedPage = await SolvePage({ params: mockParams });
+  render(ResolvedPage);
+
+  // check if result card appears
+  const resultsHeader = await screen.findByText(/test result/i);
+  expect(resultsHeader).toBeInTheDocument();
 });
