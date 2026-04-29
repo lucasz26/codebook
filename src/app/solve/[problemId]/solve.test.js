@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import SolvePage from "./page.js";
 
 // mock data
+// intercepts any requests to db.js
 jest.mock("../../../lib/db.js", () => ({
   CodebookDBHelpers: {
     getProblemById: jest.fn().mockResolvedValue({
