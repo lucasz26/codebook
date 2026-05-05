@@ -4,9 +4,6 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-
-
-
 // ── STYLES ──────────────────────────────────────────────────────────────────
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;700&display=swap');
@@ -165,22 +162,19 @@ const styles = `
   }
 `;
 
-
 // ── CARD ─────────────────────────────────────────────────────────────────────
 function ProblemCard({ problem }) {
   const { problem_id, title, description, tags } = problem;
   return (
     <Link href={`/solve/${problem_id}`} className="card">
       <div className="card-left">
-      
         <div className="card-title">{title}</div>
         <div className="card-desc">{description}</div>
       </div>
       <div className="card-right">
-  
         {/* <div className="tags"> */}
-          {/* {tags.map((t) => <span key={t} className="tag">{t}</span>)} */}
-        </div>
+        {/* {tags.map((t) => <span key={t} className="tag">{t}</span>)} */}
+      </div>
       {/* </div> */}
     </Link>
   );
@@ -190,34 +184,31 @@ function ProblemCard({ problem }) {
 export default function HomeClient({ problems }) {
   const [query, setQuery] = useState('');
 
-const visible = useMemo(() => {
-  console.log('query:', query);
-  console.log('problems:', problems);
-  
-  if (!query.trim()) return problems;
-  const q = query.toLowerCase();
-  return problems.filter(({ title, description }) =>
-    `${title} ${description}`.toLowerCase().includes(q)
-  );
-}, [problems, query]);
+  const visible = useMemo(() => {
+    console.log('query:', query);
+    console.log('problems:', problems);
 
-
+    if (!query.trim()) return problems;
+    const q = query.toLowerCase();
+    return problems.filter(({ title, description }) =>
+      `${title} ${description}`.toLowerCase().includes(q),
+    );
+  }, [problems, query]);
 
   return (
     <>
       <style>{styles}</style>
-    
+
       <section className="hero">
         <h1>Coding Problems</h1>
         <div className="search-row">
-
-        <input
-          className="search-input"
-          type="text"
-          placeholder="Search problems..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+          <input
+            className="search-input"
+            type="text"
+            placeholder="Search problems..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
           <button className="search-btn">Search</button>
         </div>
       </section>
@@ -225,13 +216,13 @@ const visible = useMemo(() => {
       <div className="section">
         <div className="section-title">Problems — {visible.length} results</div>
         <div className="card-list">
-          {visible.length === 0
-            ? <p className="empty">No problems match your search.</p>
-            : visible.map((p) => <ProblemCard key={p.problem_id} problem={p} />)
-          }
+          {visible.length === 0 ? (
+            <p className="empty">No problems match your search.</p>
+          ) : (
+            visible.map((p) => <ProblemCard key={p.problem_id} problem={p} />)
+          )}
         </div>
       </div>
     </>
   );
 }
-
