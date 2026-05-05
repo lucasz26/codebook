@@ -9,6 +9,8 @@
     "lint": "eslint",
     "test": "jest --watch"
     "format": "prettier --write ."
+    "test": "jest --watch",
+    "db:attach": "docker exec -it postgres_db psql -U myuser -d codebook"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
