@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import SolvePage from "./page.js";
 
@@ -7,9 +7,9 @@ jest.mock("../../../lib/db.js", () => ({
   CodebookDBHelpers: {
     getProblemById: jest.fn().mockResolvedValue({
       title: "Mock Title",
-      description: "This is a mock description."
-    })
-  }
+      description: "This is a mock description.",
+    }),
+  },
 }));
 
 // tests whether SolvePage component displays problem title and description correctly

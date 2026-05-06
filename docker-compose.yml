@@ -27,7 +27,7 @@ services:
     image: alpine:latest
     depends_on:
       - piston
-    entrypoint: 
+    entrypoint:
       - /bin/sh
       - -c
       - |

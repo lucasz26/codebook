@@ -43,26 +43,28 @@ export default function ProblemClient({ problem }) {
         <div className="flex flex-col gap-4">
           <Card>
             <Editor
-              onMount={(editor) => editorRef.current = editor}
+              onMount={(editor) => (editorRef.current = editor)}
               height="400px"
               defaultLanguage="cpp"
               theme="vs-dark"
               value=""
               options={{
-                minimap: { enabled: false }
+                minimap: { enabled: false },
               }}
             />
-            <Button
-              type="submit"
-              text="Submit"
-              onClick={handleSubmit}
-            />
+            <Button type="submit" text="Submit" onClick={handleSubmit} />
           </Card>
           <Card>
             <h1>Test Result</h1>
             <p>{status}</p>
             {results && (
-              <div className={results.verdict === "Accepted" ? "text-green-500" : "text-red-500"}>
+              <div
+                className={
+                  results.verdict === "Accepted"
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+              >
                 {results.verdict}
               </div>
             )}
