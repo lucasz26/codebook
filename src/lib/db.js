@@ -1,12 +1,12 @@
-import postgres from 'postgres';
+import postgres from "postgres";
 
-console.log('INIT_DB');
+console.log("INIT_DB");
 
 const sql = postgres({
-  host: 'localhost:5432',
-  user: 'myuser',
-  password: 'mypassword',
-  database: 'codebook',
+  host: "localhost:5432",
+  user: "myuser",
+  password: "mypassword",
+  database: "codebook",
 });
 
 // Eventually move to docker compose or something if we can
@@ -23,14 +23,14 @@ const sql = postgres({
   const rowsCount = (await sql`SELECT COUNT(*) FROM Problems`)[0].count;
   console.log(rowsCount);
   if (rowsCount < 1) {
-    console.log('inserting n-queens');
+    console.log("inserting n-queens");
     await sql`
             INSERT INTO Problems (title, description)
             VALUES('N-Queens', '...')
         `;
   }
   if (rowsCount < 2) {
-    console.log('inserting two sum');
+    console.log("inserting two sum");
     await sql`
             INSERT INTO Problems (title, description)
             VALUES('Two Sum', '...')
@@ -43,7 +43,7 @@ const sql = postgres({
 export class CodebookDBHelpers {
   static async getProblems() {
     let result = await sql`SELECT json_agg(u) FROM Problems u`;
-    return result[0]['json_agg'];
+    return result[0]["json_agg"];
   }
   static async getProblemById(problemId) {
     let result =
@@ -74,7 +74,7 @@ export class CodebookDBHelpers {
   static async getResultsById(submissionId) {
     return {
       id: submissionId,
-      verdict: 'Accepted',
+      verdict: "Accepted",
     };
   }
 
@@ -92,9 +92,9 @@ export class CodebookDBHelpers {
                 ('Two Sum', '...')
             `;
 
-      console.log('Database reset successful');
+      console.log("Database reset successful");
     } catch (error) {
-      console.error('Failed to reset database:', error);
+      console.error("Failed to reset database:", error);
       throw error;
     }
   }

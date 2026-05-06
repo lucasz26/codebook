@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useState, useMemo } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // ── STYLES ──────────────────────────────────────────────────────────────────
 const styles = `
@@ -182,11 +182,11 @@ function ProblemCard({ problem }) {
 
 // ── HOME ─────────────────────────────────────────────────────────────────────
 export default function HomeClient({ problems }) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const visible = useMemo(() => {
-    console.log('query:', query);
-    console.log('problems:', problems);
+    console.log("query:", query);
+    console.log("problems:", problems);
 
     if (!query.trim()) return problems;
     const q = query.toLowerCase();

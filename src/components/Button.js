@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
 export default function Button({
   text,
   onClick,
-  type = 'button',
-  className = '',
+  type = "button",
+  className = "",
 }) {
   return (
     <button

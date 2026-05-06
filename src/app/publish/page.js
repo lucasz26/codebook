@@ -1,22 +1,22 @@
-'use client'; // This must be at the very top to allow hooks like useState
+"use client"; // This must be at the very top to allow hooks like useState
 
-import { useState } from 'react';
-import { problems } from '@/lib/data';
-import { addProblem, resetDB } from './actions';
+import { useState } from "react";
+import { problems } from "@/lib/data";
+import { addProblem, resetDB } from "./actions";
 
 export default function Publish() {
   // Using useState helps a lot in this case. We can quickly adapt or remove.
 
   //    Variable      "Set method"          Init value
-  const [title, setTitle] = useState(''); // The title
-  const [description, setDescription] = useState(''); // Descrption
+  const [title, setTitle] = useState(""); // The title
+  const [description, setDescription] = useState(""); // Descrption
   const [id, setCount] = useState(2); // The "Next ID". Since we start w/ 1, our next ID is 2.
   const [hiddenCase, setHidden] = useState([1]); // Array of what test cases are "Hidden". Upon creation, they will automatically be hidden.
-  const [notif, setNotification] = useState({ message: '', type: '' }); // The notification that says if something was submitted successfully or not!
+  const [notif, setNotification] = useState({ message: "", type: "" }); // The notification that says if something was submitted successfully or not!
 
   // Dictionary for test cases. This is a JS object that works similarly to map<int, pair<string,string>>
   const [testCases, setTestCase] = useState({
-    [1]: { input: '', output: '' },
+    [1]: { input: "", output: "" },
   });
 
   // FUNCTIONS
@@ -27,21 +27,21 @@ export default function Publish() {
     const tTitle = title.trim();
     const tDescription = description.trim();
 
-    if (tTitle == '' || tDescription == '') {
-      if (tTitle == '' && tDescription == '') {
+    if (tTitle == "" || tDescription == "") {
+      if (tTitle == "" && tDescription == "") {
         setNotification({
           message: "You're missing a title and description!",
-          type: 'warning',
+          type: "warning",
         });
-      } else if (tTitle == '') {
+      } else if (tTitle == "") {
         setNotification({
           message: "You're missing a title!",
-          type: 'warning',
+          type: "warning",
         });
       } else {
         setNotification({
           message: "You're missing a description!",
-          type: 'warning',
+          type: "warning",
         });
       }
 
@@ -49,16 +49,16 @@ export default function Publish() {
     } else {
       const result = pullTestCases(); // "Pull" the test cases. If it's successful, we'll get a "success" notification.
 
-      if (result == 'success') {
+      if (result == "success") {
         await addProblem(tTitle, tDescription); // Actually add to the SQL database.
-        setNotification({ message: 'Problem submitted!', type: 'success' });
+        setNotification({ message: "Problem submitted!", type: "success" });
         return;
       } else {
-        setNotification({ message: result, type: 'warning' });
+        setNotification({ message: result, type: "warning" });
       }
     }
 
-    setTimeout(() => setNotification({ message: '', type: '' }), 3000);
+    setTimeout(() => setNotification({ message: "", type: "" }), 3000);
   };
 
   const handleReset = async (e) => {
@@ -74,7 +74,7 @@ export default function Publish() {
     setTestCase((prev) => ({
       // We're essentially saying "Hey, take the previous inputs, and tack on this new one."
       ...prev,
-      [id]: { input: '', output: '' }, // Keep it blank. This is also how we check if an entry is empty.
+      [id]: { input: "", output: "" }, // Keep it blank. This is also how we check if an entry is empty.
     }));
 
     setHidden((prev) => [...prev, id]);
@@ -89,7 +89,7 @@ export default function Publish() {
     // Check if there's 1 case, you must submit minimum 1 case.
     if (id <= 2) {
       // Since we use id like "nextID", we know that there's only one case if our "Next ID" is 2.
-      console.log('CANNOT REMOVE');
+      console.log("CANNOT REMOVE");
     } else {
       setTestCase((prev) => {
         const newState = { ...prev }; // Take the old dictionary..
@@ -112,7 +112,7 @@ export default function Publish() {
 
   const pullTestCases = (e) => {
     const verifyCaseEntry = ([id, data]) => {
-      return !(data.input == '' || data.output == '');
+      return !(data.input == "" || data.output == "");
     };
 
     // First, check if everything has an entry. If not, we'll pass a message along.
@@ -131,11 +131,11 @@ export default function Publish() {
     const typeOf = (str) => {
       try {
         const parsed = JSON.parse(str);
-        if (Array.isArray(parsed)) return 'array';
+        if (Array.isArray(parsed)) return "array";
         return typeof parsed; // This is the case for NUMBERS, objects, bools, etc.
       } catch (e) {
         // JSON.parse() struggles with strings, so any error caught is a string.
-        return 'string';
+        return "string";
       }
     };
 
@@ -147,9 +147,9 @@ export default function Publish() {
     console.log(
       "We're expecting " +
         inputType +
-        ' inputs and ' +
+        " inputs and " +
         outputType +
-        ' outputs.',
+        " outputs.",
     );
 
     for (const [id, data] of Object.entries(testCases)) {
@@ -165,25 +165,25 @@ export default function Publish() {
 
     // Finally, we finally "pull" this validated information.
     console.log(
-      'All inputs are a(n) ' +
+      "All inputs are a(n) " +
         inputType +
-        '  |  All outputs are a(n)' +
+        "  |  All outputs are a(n)" +
         outputType,
     );
 
     for (const [id, data] of Object.entries(testCases)) {
       console.log(
         id +
-          ' : ' +
+          " : " +
           data.input +
-          ' => ' +
+          " => " +
           data.output +
-          ' and is ' +
-          (hiddenCase.includes(Number(id)) ? 'HIDDEN' : 'VISIBLE'),
+          " and is " +
+          (hiddenCase.includes(Number(id)) ? "HIDDEN" : "VISIBLE"),
       );
     }
 
-    return 'success'; // Everything went through okay? Then we can return a success message!
+    return "success"; // Everything went through okay? Then we can return a success message!
   };
 
   const testID = (e) => {
@@ -212,20 +212,20 @@ export default function Publish() {
     for (let i = 0; i < problems.length; i++) {
       console.log(
         problems[i].id +
-          ' : ' +
+          " : " +
           problems[i].title +
-          '  |  ' +
+          "  |  " +
           problems[i].description,
       );
     }
   };
 
   return (
-    <main style={{ padding: '2rem' }}>
+    <main style={{ padding: "2rem" }}>
       <h1>Publish New Problem</h1>
 
       {/* Title Block */}
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{ marginBottom: "1rem" }}>
         {/* A space for a label and a subtext (which is italicized and is smaller) */}
         <div className="flex items-end">
           <label htmlFor="textboxes" className="p-1">
@@ -242,13 +242,13 @@ export default function Publish() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Question Name..."
-          style={{ padding: '0.5rem', width: '300px', resize: 'none' }}
+          style={{ padding: "0.5rem", width: "300px", resize: "none" }}
         />
       </div>
 
       {/* Description */}
-      <div style={{ marginBottom: '1rem' }}>
-        <label htmlFor="description" style={{ display: 'block' }}>
+      <div style={{ marginBottom: "1rem" }}>
+        <label htmlFor="description" style={{ display: "block" }}>
           Description:
         </label>
         <textarea
@@ -257,17 +257,17 @@ export default function Publish() {
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description"
           style={{
-            padding: '0.5rem',
-            width: '100%',
-            height: '200px',
-            borderWidth: '1px',
+            padding: "0.5rem",
+            width: "100%",
+            height: "200px",
+            borderWidth: "1px",
 
-            resize: 'none',
+            resize: "none",
 
-            textWrap: 'wrap',
-            whiteSpace: 'pre-wrap',
-            wordWrap: 'break-word',
-            overflowWrap: 'break-word',
+            textWrap: "wrap",
+            whiteSpace: "pre-wrap",
+            wordWrap: "break-word",
+            overflowWrap: "break-word",
           }}
         />
       </div>
@@ -289,7 +289,7 @@ export default function Publish() {
             <div className="p-1 border rounded w-[35px] place-items-center center">
               <button
                 type="addCase"
-                style={{ cursor: 'pointer', textAlign: 'center' }}
+                style={{ cursor: "pointer", textAlign: "center" }}
               >
                 +
               </button>
@@ -298,7 +298,7 @@ export default function Publish() {
 
           <form onSubmit={removeCase}>
             <div className="p-1">
-              <button type="addCase" style={{ cursor: 'pointer' }}>
+              <button type="addCase" style={{ cursor: "pointer" }}>
                 -
               </button>
             </div>
@@ -323,7 +323,7 @@ export default function Publish() {
                 className="flex-1 min-w-0 border p-1.5 rounded text-sm focus:ring-1 focus:outline-none"
                 placeholder="Input"
                 value={data.input}
-                onChange={(e) => updateCase(id, 'input', e.target.value)}
+                onChange={(e) => updateCase(id, "input", e.target.value)}
               />
 
               <span className="text-gray-400 font-bold">→</span>
@@ -332,7 +332,7 @@ export default function Publish() {
                 className="flex-1 min-w-0 border p-1.5 rounded text-sm focus:ring-1 focus:outline-none"
                 placeholder="Output"
                 value={data.output}
-                onChange={(e) => updateCase(id, 'output', e.target.value)}
+                onChange={(e) => updateCase(id, "output", e.target.value)}
               />
 
               {/* Button to toggle case visibility. */}
@@ -341,13 +341,13 @@ export default function Publish() {
                 style={{
                   // If the test case is in the "HIDDEN" list, it's red. Otherwise, it's green.
                   backgroundColor: hiddenCase.includes(Number(id))
-                    ? '#ef4444'
-                    : '#22c55e',
-                  padding: '10px 20px',
-                  cursor: 'pointer',
+                    ? "#ef4444"
+                    : "#22c55e",
+                  padding: "10px 20px",
+                  cursor: "pointer",
                 }}
               >
-                {hiddenCase.includes(Number(id)) ? '🤫' : '📣'}
+                {hiddenCase.includes(Number(id)) ? "🤫" : "📣"}
               </button>
             </div>
           </div>
@@ -359,23 +359,23 @@ export default function Publish() {
           <div
             className={`notification ${notif.type}`}
             style={{
-              padding: '10px',
-              backgroundColor: notif.type === 'success' ? '#22c55e' : '#ef4444',
-              color: 'white',
+              padding: "10px",
+              backgroundColor: notif.type === "success" ? "#22c55e" : "#ef4444",
+              color: "white",
             }}
           >
             {notif.message}
           </div>
         )}
 
-        <button type="submit" style={{ cursor: 'pointer' }}>
+        <button type="submit" style={{ cursor: "pointer" }}>
           Submit
         </button>
       </form>
 
       {/* This is the evil RESET DB button. YOU WILL RESET THE DATABASE TO THE ORIGINAL MOCK DATA. BE WARNED. */}
       <form onSubmit={resetDB}>
-        <button type="submit" style={{ cursor: 'pointer' }}>
+        <button type="submit" style={{ cursor: "pointer" }}>
           Reset Database
         </button>
       </form>
