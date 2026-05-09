@@ -13,3 +13,22 @@ export async function saveCode(problemId, code) {
 export async function getResults(submissionId) {
   return await CodebookDBHelpers.getResultsById(submissionId);
 }
+
+export async function runCode(language, code) {
+  try {
+    const response = await fetch("http://localhost:2000/api/v2/execute", {
+      method: "POST",
+      headers: { "Content-Type": "applicatoin/json" },
+      body: JSON.stringify({
+        language: language,
+        version: "*",
+        files: [{ content: code }]
+      })
+    });
+
+    const data = await response.json()
+    return data.run;
+  } catch (error) {
+    return { error: "Piston is unreachable" };
+  }
+}
