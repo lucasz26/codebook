@@ -3,6 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import AuthManager from "@/components/logincomponents/AuthManager";
+import SignIn from "@/components/logincomponents/SignIn";
+import SignOut from "@/components/logincomponents/SignOut";
+
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/publish", label: "Publish" },
@@ -24,6 +28,7 @@ export default function Navbar() {
           </li>
         ))}
       </ul>
+      <AuthManager></AuthManager>
     </nav>
   );
 }
