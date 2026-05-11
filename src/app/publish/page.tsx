@@ -110,7 +110,7 @@ export default function Publish() {
     }));
   };
 
-  const pullTestCases = (e) => {
+  const pullTestCases = () => {
     const verifyCaseEntry = ([id, data]) => {
       return !(data.input == "" || data.output == "");
     };
@@ -238,7 +238,6 @@ export default function Publish() {
 
         <textarea
           id="title"
-          type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Question Name..."
@@ -288,7 +287,6 @@ export default function Publish() {
           <form onSubmit={addCase}>
             <div className="p-1 border rounded w-[35px] place-items-center center">
               <button
-                type="addCase"
                 style={{ cursor: "pointer", textAlign: "center" }}
               >
                 +
@@ -298,7 +296,7 @@ export default function Publish() {
 
           <form onSubmit={removeCase}>
             <div className="p-1">
-              <button type="addCase" style={{ cursor: "pointer" }}>
+              <button style={{ cursor: "pointer" }}>
                 -
               </button>
             </div>
