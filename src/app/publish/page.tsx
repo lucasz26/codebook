@@ -286,9 +286,7 @@ export default function Publish() {
         <div className="right flex items-center p-2">
           <form onSubmit={addCase}>
             <div className="p-1 border rounded w-[35px] place-items-center center">
-              <button
-                style={{ cursor: "pointer", textAlign: "center" }}
-              >
+              <button style={{ cursor: "pointer", textAlign: "center" }}>
                 +
               </button>
             </div>
@@ -296,9 +294,7 @@ export default function Publish() {
 
           <form onSubmit={removeCase}>
             <div className="p-1">
-              <button style={{ cursor: "pointer" }}>
-                -
-              </button>
+              <button style={{ cursor: "pointer" }}>-</button>
             </div>
           </form>
         </div>
