@@ -3,11 +3,12 @@ import "server-only";
 import postgres from "postgres";
 
 const sql = postgres({
-  host: "localhost:",
+  host: "localhost",
   port: Number(process.env.LOCAL_POSTGRES_PORT),
   user: process.env.LOCAL_POSTGRES_USER,
   password: process.env.LOCAL_POSTGRES_PASSWORD,
   database: process.env.LOCAL_POSTGRES_DB,
+  transform: postgres.toCamel,
 });
 
 export namespace CodebookDatabaseAPI {
@@ -52,7 +53,7 @@ export namespace CodebookDatabaseAPI {
 
   export async function getProblems(): Promise<Problem[]> {
     let result = await sql`SELECT json_agg(u) FROM Problems u`;
-    return result[0]["json_agg"];
+    return result[0]["jsonAgg"];
   }
 
   export async function getProblemById(problemId: number): Promise<Problem> {

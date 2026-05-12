@@ -40,8 +40,10 @@ INSERT INTO TestCases (problem_id, input, expected_out, visible)
 SELECT * FROM (
     VALUES
         (1, '1', '2', TRUE),
-        (1, '2', '4', FALSE),
+        (1, '2', '4', TRUE),
+        (1, '500', '1000', FALSE),
         (2, '1', '3', TRUE),
-        (2, '2', '6', FALSE)
+        (2, '2', '6', TRUE),
+        (2, '333', '999', FALSE)
 ) AS new_rows(problem_id, input, expected_out)
 WHERE (SELECT COUNT(*) FROM TestCases) < 4;
