@@ -29,13 +29,12 @@ export default function ProbLibClient({ problems }: { problems: Problem[] }) {
     if (!query.trim()) return problems;
     const q = query.toLowerCase();
     return problems.filter(({ title, description }) =>
-      `${title} ${description}`.toLowerCase().includes(q)
+      `${title} ${description}`.toLowerCase().includes(q),
     );
   }, [problems, query]);
 
   return (
     <div className="min-h-screen bg-[#111111] text-white">
-
       {/* ── HERO ── */}
       <section className="max-w-2xl mx-auto px-8 pt-16 pb-12 text-center">
         <h1 className="text-4xl font-bold tracking-tight leading-tight mb-8">
@@ -67,13 +66,10 @@ export default function ProbLibClient({ problems }: { problems: Problem[] }) {
               No problems match your search.
             </p>
           ) : (
-            visible.map((p) => (
-              <ProblemCard key={p.problemId} problem={p} />
-            ))
+            visible.map((p) => <ProblemCard key={p.problemId} problem={p} />)
           )}
         </div>
       </div>
-
     </div>
   );
 }
