@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import AuthManager from "@/components/logincomponents/AuthManager";
-import SignIn from "@/components/logincomponents/SignIn";
-import SignOut from "@/components/logincomponents/SignOut";
+import UserMenu from "@/components/logincomponents/UserMenu";
+import { SessionProvider } from "next-auth/react";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/publish", label: "Publish" },
   { href: "/profile", label: "Account" },
+  { href: "/login", label: "Login" }, // Likely temporary, I have to figure out a way to fix this.
 ];
 
 export default function Navbar() {
@@ -29,7 +29,11 @@ export default function Navbar() {
           </li>
         ))}
       </ul>
-      <AuthManager></AuthManager>
+    
+    {/* When we wnat to use Sessions, we need Session Provider. But I think we could move this??? */}
+    <SessionProvider>
+        <UserMenu></UserMenu>
+    </SessionProvider>
     </nav>
   );
 }

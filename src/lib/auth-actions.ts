@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn, signOut } from "@/auth";
+import { redirect } from "next/navigation";
 
 export async function handleSignIn() {
   try {
@@ -11,5 +12,7 @@ export async function handleSignIn() {
 }
 
 export async function handleSignOut() {
-  await signOut();
-}
+    await signOut({ redirect: false });
+    
+    redirect("/"); 
+  }
