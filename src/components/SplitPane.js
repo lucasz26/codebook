@@ -8,7 +8,7 @@ export default function SplitPane({ left, right, layout = "standard" }) {
   const classes = layouts[layout] || layouts.standard;
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 w-full">
+    <div className="flex flex-col md:flex-row gap-2 w-full">
       <div className={`w-full ${classes.left}`}>{left}</div>
       <div className={`w-full ${classes.right}`}>{right}</div>
     </div>

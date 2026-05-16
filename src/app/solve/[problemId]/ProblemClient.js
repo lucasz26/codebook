@@ -52,21 +52,23 @@ export default function ProblemClient({ problem }) {
   return (
     <SplitPane
       left={
-        <Card>
+        <Card title="Description">
           <h1>{problem.title}</h1>
           <p>{problem.description}</p>
         </Card>
       }
       right={
-        <div className="flex flex-col gap-4">
-          <Card>
-            {/*TODO: temporary button -- keybind preferences (vim, emacs, etc.) should be in a dropdown eventually*/}
-            <button
-              onClick={() => setVimEnabled(!vimEnabled)}
-              className={`mb-2 px-2 py-1 font-mono rounded ${vimEnabled ? "bg-green-700" : "bg-gray-700"} text-white`}
-            >
-              vim: {vimEnabled ? "on" : "off"}
-            </button>
+        <div className="flex flex-col gap-2">
+          <Card title="Code">
+            <div className="border-b border-monaco-mid flex">
+              {/*TODO: temporary button -- keybind preferences (vim, emacs, etc.) should be in a dropdown eventually*/}
+              <button
+                onClick={() => setVimEnabled(!vimEnabled)}
+                className={`mb-2 px-2 py-1 font-mono rounded ${vimEnabled ? "bg-green-700" : "bg-gray-700"} text-white`}
+              >
+                vim: {vimEnabled ? "on" : "off"}
+              </button>
+            </div>
             <Editor
               onMount={(editor) => (editorRef.current = editor)}
               height="400px"
@@ -94,8 +96,7 @@ export default function ProblemClient({ problem }) {
             />
             <Button type="submit" text="Submit" onClick={handleSubmit} />
           </Card>
-          <Card>
-            <h1>Test Result</h1>
+          <Card title="Test Result">
             {!results && <p>{status}</p>}
             {results && (
               <>
