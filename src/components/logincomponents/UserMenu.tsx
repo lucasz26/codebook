@@ -57,6 +57,7 @@ export default function UserMenu() {
                     <span className="text-xs text-zinc-500">Signed in as</span>
                     <span className="font-bold text-white text-sm">{session.user.name}</span>
                     <span className="text-xs text-zinc-400 truncate w-full text-center">{session.user.email}</span>
+                    <span>{session.user.id}</span> {/* Troubleshoot */}
                     
                     </div>
 
