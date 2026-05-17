@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function CredSignIn() {
-    const { update } = useSession();
+  const { update } = useSession();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,9 +16,8 @@ export default function CredSignIn() {
     await update();
 
     if (result?.error) {
-
     } else {
-        window.location.href = "/problems-library";
+      window.location.href = "/problems-library";
     }
   };
 

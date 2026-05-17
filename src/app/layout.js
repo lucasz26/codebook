@@ -16,10 +16,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <SessionProvider
-        refetchOnWindowFocus={true} 
-        refetchWhenOffline={false}
-      >
+        <SessionProvider refetchOnWindowFocus={true} refetchWhenOffline={false}>
           <Navbar />
           {children}
         </SessionProvider>

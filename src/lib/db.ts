@@ -12,22 +12,22 @@ const sql = postgres({
 });
 
 export namespace CodebookDatabaseAPI {
-    // Isabelle here, I uncommented and changed some minor stuff.
+  // Isabelle here, I uncommented and changed some minor stuff.
   export type UserCreationInformation = {
-    username: string,
-    email: string,
-    passwordHash: string,
-  }
+    username: string;
+    email: string;
+    passwordHash: string;
+  };
 
   export type User = {
-    userId: number,
-    username: string,
-    email: string,
-    passwordHash: string,
-    displayName?: string,
-    oAuthId?: string,
-    bio?: string,
-  }
+    userId: number;
+    username: string;
+    email: string;
+    passwordHash: string;
+    displayName?: string;
+    oAuthId?: string;
+    bio?: string;
+  };
 
   export type TestCaseData = {
     problemId: number;
@@ -111,24 +111,23 @@ export namespace CodebookDatabaseAPI {
 
   // Stubs for login. Uh... I don't know if this is right?
   export async function getUserByEmail(email: string): Promise<User | null> {
-    
     // For now, I have some ugly ass stubs. Bear with me here.
     if (email === "bobjoe@gmail.com") {
-        return {
-          userId: 2,
-          username: "bobjoe",
-          email: "bobjoe@gmail.com",
-          passwordHash: "12345", // For now, we're plaintexting it. I KNOW, ITS UNSAFE :(
-          displayName: "evil bob joe",
-        };
+      return {
+        userId: 2,
+        username: "bobjoe",
+        email: "bobjoe@gmail.com",
+        passwordHash: "12345", // For now, we're plaintexting it. I KNOW, ITS UNSAFE :(
+        displayName: "evil bob joe",
+      };
     } else if (email === "hitman@gmail.com") {
-        return {
-            userId: 3,
-            username: "hitman",
-            email: "hitman@gmail.com",
-            passwordHash: "hitmen", // Gosh, I love being unsafe.
-            // This example does not have a display name.
-        }
+      return {
+        userId: 3,
+        username: "hitman",
+        email: "hitman@gmail.com",
+        passwordHash: "hitmen", // Gosh, I love being unsafe.
+        // This example does not have a display name.
+      };
     }
 
     // Looks for an email, returns the most vital information for display.
@@ -142,7 +141,6 @@ export namespace CodebookDatabaseAPI {
     // All we need to do is to add all the information. :)
     return null;
   }
-    
 }
 
 // console.log(await CodebookDatabaseAPI.getProblemById(1))

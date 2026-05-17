@@ -22,7 +22,7 @@ export default function Navbar() {
   const { data: session, status, update } = useSession();
 
   // Uncomment this if you're having issues with seeing current status (unauth, auth, etc.)
-    // console.log("NAVBAR RENDER:", { status, hasUser: !!session?.user });
+  // console.log("NAVBAR RENDER:", { status, hasUser: !!session?.user });
 
   const visibleLinks = NAV_LINKS.filter((link) => {
     // If the user is logged in, don't show the Login link
