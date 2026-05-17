@@ -109,6 +109,16 @@ export namespace CodebookDatabaseAPI {
       await sql`SELECT * FROM Testcases WHERE problem_id = ${problemId}`;
     return Array.from(result.values()) as TestCase[];
   }
+
+  // Stubs for login. There are a few columns we may need:
+  // ID (This is just an incrementing ID, Primary Key.)
+  // OAuth ID (This is unique, and not required if we're using credential.)
+  // Email
+  // Password (Which will NOT be plaintext)
+  // Name (Display Name)
+  // Profile Image.
+
+
 }
 
 // console.log(await CodebookDatabaseAPI.getProblemById(1))

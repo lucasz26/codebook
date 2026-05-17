@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import UserMenu from "@/components/logincomponents/UserMenu";
-import { SessionProvider } from "next-auth/react";
 
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -19,7 +19,10 @@ const NAV_LINKS = [
 export default function Navbar() {
   const pathname = usePathname();
 
-  const { status } = useSession();
+  const { data: session, status, update } = useSession();
+
+  // Uncomment this if you're having issues with seeing current status (unauth, auth, etc.)
+    // console.log("NAVBAR RENDER:", { status, hasUser: !!session?.user });
 
   const visibleLinks = NAV_LINKS.filter((link) => {
     // If the user is logged in, don't show the Login link
@@ -54,7 +57,7 @@ export default function Navbar() {
       </ul>
 
       {/* Moved Session Provider out to the Layout, so everything will obtain acces to SessionProvider. */}
-      <UserMenu></UserMenu>
+      <UserMenu key={status} />
     </nav>
   );
 }

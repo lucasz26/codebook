@@ -1,12 +1,14 @@
 "use client";
 
-// This is for OAuth
+// This is for OAuth Login
 import SignIn from "@/components/logincomponents/SignIn";
 import SignOut from "@/components/logincomponents/SignOut";
 
-// This is for Credential
+// This is for Credential Login
 import CredSignIn from "@/components/logincomponents/CredSignIn";
 import CredRegister from "@/components/logincomponents/CredRegister";
+
+import { fakeUsers } from "@/lib/data";
 
 import { useState } from "react";
 

@@ -1,13 +1,25 @@
+import { credentialLogIn } from "@/lib/auth-actions";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 export default function CredSignIn() {
+    const { update } = useSession();
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    console.log("I'm loggin in: " + email + " " + password);
+    const result = await credentialLogIn(email, password);
 
-    // Add spot for Registering account.
+    await update();
+
+    if (result?.error) {
+
+    } else {
+        window.location.href = "/problems-library";
+    }
   };
 
   return (
