@@ -1,3 +1,6 @@
+// to prevent crash due to pre-rendering pages during build
+export const dynamic = "force-dynamic";
+
 import Navbar from "@/components/Navbar";
 import { SessionProvider } from "next-auth/react"; // I need to stop putting SessionProvider everywhere LMAO
 
