@@ -4,8 +4,17 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import Credentials from "next-auth/providers/credentials";
 
 import { syncOAuth } from "@/lib/auth-actions";
-import { getUserByEmail } from "@/lib/auth-actions";
 
+import { CodebookDatabaseAPI } from "@/lib/db";
+import { oldUserByEmail } from "@/lib/auth-actions";
+
+type OldUser = {
+    userId: number;
+    email: string;
+    passwordHash: string;
+    username: string;
+    displayName?: string
+  };
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     session: {
@@ -30,13 +39,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               }
           
               try {
-                const user = await getUserByEmail(credentials.email as string);
+
+                let user: CodebookDatabaseAPI.User | OldUser | null = await CodebookDatabaseAPI.getUserByEmail(credentials.email as string);
+                if (!user) {
+                    user = await oldUserByEmail(credentials.email as string) as OldUser | null;
+                }
                 
-                if (user && user.password === credentials.password) {
+                if (user && user.passwordHash == credentials.password) {
                   return {
-                    id: user.id.toString(),
+                    id: user.userId.toString(),
                     email: user.email,
-                    name: user.name || user.email.split('@')[0], // Fallback name if DB is empty
+                    name: user.displayName || user.username, // Use the username (email splice) if we don't have a display at the moment.
                     image: `https://api.dicebear.com/7.x/initials/svg?seed=${user.email}`,
                   };
                 }
