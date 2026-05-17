@@ -62,16 +62,13 @@ export default function ProblemClient({ problem }) {
           <Card
             title="Code"
             optionsRight={
-              <button onClick={() => setVimEnabled(!vimEnabled)}
+              <button
+                onClick={() => setVimEnabled(!vimEnabled)}
                 className={`rounded transition-all duration-150 hover:text-white ${
-        vimEnabled ? "text-white" : "text-monaco-muted"
-}`
-                }
+                  vimEnabled ? "text-white" : "text-monaco-muted"
+                }`}
               >
-                <svg
-                  viewBox="0 0 15 15"
-                  className="w-6 h-5 fill-current"
-                >
+                <svg viewBox="0 0 15 15" className="w-6 h-5 fill-current">
                   <path d="M7 1H1V4H2V14H5.74031L14 3.67539V1H8V4H9.43248L6 8.11898V4H7V1Z" />
                 </svg>
               </button>
@@ -98,11 +95,21 @@ export default function ProblemClient({ problem }) {
                 lineNumbers: vimEnabled ? "relative" : "on",
               }}
             />
-            <div className={`text-monaco-txt text-xs h-6 px-2 flex items-center font-mono -mx-4 ${vimEnabled ? "bg-monaco-mid" : "bg-monaco-dark"}`}>
-            <div className="px-4" id="vim-status-bar"/>
+            <div
+              className={`text-monaco-txt text-xs h-6 px-2 flex items-center font-mono -mx-4 ${vimEnabled ? "bg-monaco-mid" : "bg-monaco-dark"}`}
+            >
+              <div className="px-4" id="vim-status-bar" />
             </div>
-            <Button type="submit" text="Submit" onClick={handleSubmit} />
           </Card>
+          <div className="w-full flex">
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="px-16 py-1.5 w-full rounded text-sm font-bold bg-monaco-mid text-green-500 hover:bg-green-700 hover:text-monaco-txt transition-colors cursor-pointer"
+            >
+              Submit
+            </button>
+          </div>
           <Card title="Test Result">
             {!results && <p>{status}</p>}
             {results && (
