@@ -210,7 +210,12 @@ export default function ProblemClient({ problem }) {
               <Card title="Test Result">
                 {!results && !status && (
                   <div className="flex flex-col items-center justify-center h-full text-center py-8">
-                    <p suppressHydrationWarning className="text-xl text-monaco-mid font-bold">{taunt}</p>
+                    <p
+                      suppressHydrationWarning
+                      className="text-xl text-monaco-mid font-bold"
+                    >
+                      {taunt}
+                    </p>
                   </div>
                 )}
                 {!results && status && <p>{status}</p>}

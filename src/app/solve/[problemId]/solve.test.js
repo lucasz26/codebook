@@ -15,7 +15,7 @@ jest.mock("../../../lib/db.ts", () => ({
 
 jest.mock("./taunts.js", () => ({
   __esModule: true,
-  default: ["Mocked Taunt Message"]
+  default: ["Mocked Taunt Message"],
 }));
 
 jest.mock("../../../components/SplitPane", () => {
@@ -31,7 +31,9 @@ jest.mock("../../../components/SplitPane", () => {
 
 jest.mock("react-resizable-panels", () => ({
   Group: ({ children }) => <div data-testid="mock-group">{children}</div>,
-  PanelGroup: ({ children }) => <div data-testid="mock-panel-group">{children}</div>,
+  PanelGroup: ({ children }) => (
+    <div data-testid="mock-panel-group">{children}</div>
+  ),
   Panel: ({ children }) => <div data-testid="mock-panel">{children}</div>,
   Separator: () => <div data-testid="mock-separator" />,
 }));
