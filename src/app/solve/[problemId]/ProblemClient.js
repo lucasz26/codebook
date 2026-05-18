@@ -99,15 +99,18 @@ export default function ProblemClient({ problem }) {
               <Card
                 title="Code"
                 optionsLeft={
-                  <div className="flex items-center gap-1.5 relative" ref={dropdownRef}>
+                  <div
+                    className="flex items-center gap-1.5 relative"
+                    ref={dropdownRef}
+                  >
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className="text-xs font-semibold text-monaco-muted hover:text-white transition-all duration-150 capitalize flex items-center gap-1"
+                      className="group text-xs font-semibold text-monaco-muted hover:text-white transition-all duration-150 capitalize flex items-center gap-1"
                     >
                       {language}
                       <svg
                         viewBox="0 0 512 298.04"
-                        className="w-2.5 h-2.5 fill-current text-monaco-muted shrink-0 duration-150"
+                        className="w-2.5 h-2.5 fill-current text-monaco-muted shrink-0 duration-150 group-hover:text-white"
                       >
                         <g>
                           <path d="M12.08 70.78c-16.17-16.24-16.09-42.54.15-58.7 16.25-16.17 42.54-16.09 58.71.15L256 197.76 441.06 12.23c16.17-16.24 42.46-16.32 58.71-.15 16.24 16.16 16.32 42.46.15 58.7L285.27 285.96c-16.24 16.17-42.54 16.09-58.7-.15L12.08 70.78z" />
@@ -209,18 +212,23 @@ export default function ProblemClient({ problem }) {
               <Card title="Test Result">
                 {!results && !status && (
                   <div className="flex flex-col items-center justify-center h-full text-center py-8">
-                    <p className="text-xl text-monaco-mid font-bold">
-                      {taunt}
-                    </p>
+                    <p className="text-xl text-monaco-mid font-bold">{taunt}</p>
                   </div>
                 )}
                 {!results && status && <p>{status}</p>}
                 {results && (
                   <>
                     <h2
-                      className={`mb-4 text-xl font-bold ${results.verdict === "Accepted" ? "text-green-400" : "text-red-400"}`}
+                      className={`mb-4 px-4 text-xl font-bold flex ${results.verdict === "Accepted" ? "text-green-400" : "text-red-400"}`}
                     >
-                      {results.verdict}
+                      <div className="mr-auto">{results.verdict}</div>
+                      <div className="flex ml-auto">
+                        <div>{results.passedCount}</div>
+                        <div className="px-4 text-monaco-txt">/</div>
+                        <div className="text-monaco-txt">
+                          {results.results.length}
+                        </div>
+                      </div>
                     </h2>
                     {results.results.map((test, index) => (
                       <TestcaseBlock key={index} test={test} index={index} />
