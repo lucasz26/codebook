@@ -20,7 +20,12 @@ export default function ProblemClient({ problem }) {
   const [vimEnabled, setVimEnabled] = useState(false);
   const [language, setLanguage] = useState("c++");
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [taunt, setTaunt] = useState("");
+  const [taunt] = useState(() => {
+    if (taunts && taunts.length > 0) {
+      const randomIndex = Math.floor(Math.random() * taunts.length);
+      return taunts[randomIndex];
+    }
+  });
 
   useEffect(() => {
     const handleVim = async () => {
@@ -42,13 +47,6 @@ export default function ProblemClient({ problem }) {
 
     handleVim();
   }, [vimEnabled]);
-
-  useEffect(() => {
-    if (taunts && taunts.length > 0) {
-      const randomIndex = Math.floor(Math.random() * taunts.length);
-      setTaunt(taunts[randomIndex]);
-    }
-  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -212,7 +210,7 @@ export default function ProblemClient({ problem }) {
               <Card title="Test Result">
                 {!results && !status && (
                   <div className="flex flex-col items-center justify-center h-full text-center py-8">
-                    <p className="text-xl text-monaco-mid font-bold">{taunt}</p>
+                    <p suppressHydrationWarning className="text-xl text-monaco-mid font-bold">{taunt}</p>
                   </div>
                 )}
                 {!results && status && <p>{status}</p>}
