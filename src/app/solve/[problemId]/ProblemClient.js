@@ -83,7 +83,7 @@ export default function ProblemClient({ problem }) {
               <h1 className="text-xl font-bold text-monaco-txt py-2">
                 {problem.title}
               </h1>
-              <h1 className="text-xs text-monaco-muted py-2">By mp248</h1>
+              <h1 className="text-xs text-monaco-muted pb-2">By mp248</h1>
               <p className="text-s text-monaco-txt py-2">
                 {problem.description}
               </p>
