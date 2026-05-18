@@ -7,6 +7,7 @@ import Card from "../../../components/Card";
 import Editor from "@monaco-editor/react";
 import SplitPane from "../../../components/SplitPane";
 import TestcaseBlock from "../../../components/TestcaseBlock";
+import taunts from "./taunts.js";
 
 const LANGUAGES = ["c++", "python", "java"];
 
@@ -19,6 +20,7 @@ export default function ProblemClient({ problem }) {
   const [vimEnabled, setVimEnabled] = useState(false);
   const [language, setLanguage] = useState("c++");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [taunt, setTaunt] = useState("");
 
   useEffect(() => {
     const handleVim = async () => {
@@ -40,6 +42,13 @@ export default function ProblemClient({ problem }) {
 
     handleVim();
   }, [vimEnabled]);
+
+  useEffect(() => {
+    if (taunts && taunts.length > 0) {
+      const randomIndex = Math.floor(Math.random() * taunts.length);
+      setTaunt(taunts[randomIndex]);
+    }
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -201,7 +210,7 @@ export default function ProblemClient({ problem }) {
                 {!results && !status && (
                   <div className="flex flex-col items-center justify-center h-full text-center py-8">
                     <p className="text-xl text-monaco-mid font-bold">
-                      Awaiting signs of intelligent life...
+                      {taunt}
                     </p>
                   </div>
                 )}
