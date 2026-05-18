@@ -8,12 +8,17 @@ import Editor from "@monaco-editor/react";
 import SplitPane from "../../../components/SplitPane";
 import TestcaseBlock from "../../../components/TestcaseBlock";
 
+const LANGUAGES = ["c++", "python", "java"];
+
 export default function ProblemClient({ problem }) {
   const editorRef = useRef(null);
   const vimInstanceRef = useRef(null);
+  const dropdownRef = useRef(null);
   const [results, setResults] = useState(null);
   const [status, setStatus] = useState("");
   const [vimEnabled, setVimEnabled] = useState(false);
+  const [language, setLanguage] = useState("c++");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleVim = async () => {
@@ -36,6 +41,16 @@ export default function ProblemClient({ problem }) {
     handleVim();
   }, [vimEnabled]);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleSubmit = async () => {
     if (!editorRef.current) return;
     const code = editorRef.current.getValue();
@@ -44,7 +59,7 @@ export default function ProblemClient({ problem }) {
     const submissionId = await saveCode(problem.id, code);
 
     setStatus("Running tests...");
-    const data = await runCode(1, "cpp", code);
+    const data = await runCode(1, language, code);
 
     setResults(data);
     setStatus("Done");
@@ -74,10 +89,48 @@ export default function ProblemClient({ problem }) {
             <Panel defaultSize="80%" minSize="20%" maxSize="80%">
               <Card
                 title="Code"
+                optionsLeft={
+                  <div className="flex items-center gap-1.5 relative" ref={dropdownRef}>
+                    <button
+                      onClick={() => setDropdownOpen(!dropdownOpen)}
+                      className="text-xs font-semibold text-monaco-muted hover:text-white transition-all duration-150 capitalize flex items-center gap-1"
+                    >
+                      {language}
+                      <svg
+                        viewBox="0 0 512 298.04"
+                        className="w-2.5 h-2.5 fill-current text-monaco-muted shrink-0 duration-150"
+                      >
+                        <g>
+                          <path d="M12.08 70.78c-16.17-16.24-16.09-42.54.15-58.7 16.25-16.17 42.54-16.09 58.71.15L256 197.76 441.06 12.23c16.17-16.24 42.46-16.32 58.71-.15 16.24 16.16 16.32 42.46.15 58.7L285.27 285.96c-16.24 16.17-42.54 16.09-58.7-.15L12.08 70.78z" />
+                        </g>
+                      </svg>
+                    </button>
+                    {dropdownOpen && (
+                      <div className="absolute top-full left-0 w-32 bg-monaco-mid border border-monaco-muted rounded-xl z-50 overflow-hidden">
+                        {LANGUAGES.map((lang) => (
+                          <button
+                            key={lang}
+                            onClick={() => {
+                              setLanguage(lang);
+                              setDropdownOpen(false);
+                            }}
+                            className={`w-full text-left px-3 py-1.5 text-xs transition-colors duration-150 capitalize ${
+                              language === lang
+                                ? "bg-monaco-mid text-white font-medium"
+                                : "text-monaco-muted hover:bg-monaco-light hover:text-white"
+                            }`}
+                          >
+                            {lang}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                }
                 optionsRight={
                   <button
                     onClick={() => setVimEnabled(!vimEnabled)}
-                    className={`rounded transition-all duration-150 hover:text-white ${
+                    className={`transition-all duration-150 hover:text-white ${
                       vimEnabled ? "text-white" : "text-monaco-muted"
                     }`}
                   >
@@ -145,7 +198,14 @@ export default function ProblemClient({ problem }) {
             </Separator>
             <Panel defaultSize="20%" minSize="20%" maxSize="80%">
               <Card title="Test Result">
-                {!results && <p>{status}</p>}
+                {!results && !status && (
+                  <div className="flex flex-col items-center justify-center h-full text-center py-8">
+                    <p className="text-xl text-monaco-mid font-bold">
+                      Awaiting signs of intelligent life...
+                    </p>
+                  </div>
+                )}
+                {!results && status && <p>{status}</p>}
                 {results && (
                   <>
                     <h2
